@@ -38,6 +38,9 @@ import os, sys
 from subprocess import Popen, PIPE
 
 from rosdoc.rdcore import *
+import rospkg
+
+_rospack = rospkg.RosPack()
 
 ## Main entrypoint into creating Epydoc documentation
 ## @return [str]: list of packages that were successfully generated
@@ -80,7 +83,7 @@ def generate_epydoc(ctx):
                 import roslib.launcher
                 # - really dirty here, but the launcher intentionally caches the path for performance
                 del roslib.launcher._bootstrapped[:]
-                paths = roslib.launcher._generate_python_path(package, [], os.environ) 
+                paths = roslib.launcher._generate_python_path(package, _rospack) 
                 env = os.environ.copy()
                 env['PYTHONPATH'] = os.pathsep.join([p for p in paths if os.path.exists(p)])
 
